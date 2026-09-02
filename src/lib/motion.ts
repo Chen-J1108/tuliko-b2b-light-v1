@@ -154,9 +154,11 @@ export function initMotionSystem(root: HTMLElement, director: SceneDirector) {
         const reveal = director.snapshot.reducedMotion
           ? 1
           : usesReferenceFlow
-            // Begin the ordered reveal as the copy enters from below and
-            // finish shortly before it reaches the editorial reading line.
-            ? clamp01((viewportHeight * 0.5 - rect.top) / (viewportHeight * 0.4))
+            // Anime.js keeps each message on a natural 100vh row and gives
+            // its text most of a viewport to resolve. Start while the row is
+            // still below the fold and finish before the heading reaches the
+            // lower editorial reading line, without changing 1:1 scroll speed.
+            ? clamp01((viewportHeight * 0.82 - rect.top) / (viewportHeight * 0.7))
             : rangeProgress(progress, 0, 0.36);
         const revealCursor = reveal * (copyCharacters.length + 8);
         copyCharacters.forEach((character, characterIndex) => {

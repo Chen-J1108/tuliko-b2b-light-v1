@@ -1983,11 +1983,7 @@ main {
 @media (min-width: 901px) {
   .acoustic-section.is-active .chapter-copy {
     opacity: calc(var(--acoustic-copy-opacity, 1) * var(--copy-visibility, 1));
-    transform: translate3d(
-      0,
-      calc(-50% + var(--acoustic-copy-offset, 0px) + var(--copy-scroll-y, 0px)),
-      0
-    );
+    transform: none;
   }
 
   .modular-section.is-active .chapter-copy {
@@ -2021,8 +2017,11 @@ main {
   .acoustic-section .chapter-copy,
   .modular-section .chapter-copy,
   .interaction-section .chapter-copy {
-    top: 50%;
-    transform: translate3d(0, -50%, 0);
+    /* Anime.js reference calibration at a 720px viewport: the feature
+       heading sits at roughly 68vh inside each natural 100vh row. Our kicker
+       adds about 6vh, so anchor the complete copy block at 62vh. */
+    top: 62lvh;
+    transform: none;
     transition: none;
     /* The section itself now owns the bottom-to-top journey. A separate copy
        transform or opacity gate would double the travel and create a pop. */
