@@ -46,6 +46,10 @@ export class SceneDirector {
     this.listeners.forEach((listener) => listener());
   }
 
+  invalidate() {
+    this.notify();
+  }
+
   setChapter(
     activeIndex: number,
     localProgress: number,
@@ -53,16 +57,29 @@ export class SceneDirector {
     narrativeOverride?: number,
   ) {
     const safeIndex = Math.min(CHAPTER_IDS.length - 1, Math.max(0, activeIndex));
+    const nextLocalProgress = Math.min(1, Math.max(0, localProgress));
+    const nextNarrative = narrativeOverride === undefined
+      ? safeIndex + nextLocalProgress
+      : Math.min(CHAPTER_IDS.length, Math.max(0, narrativeOverride));
+    const nextPageProgress = Math.min(1, Math.max(0, pageProgress));
+    const changed = this.snapshot.activeIndex !== safeIndex
+      || Math.abs(this.snapshot.localProgress - nextLocalProgress) > 0.00001
+      || Math.abs(this.snapshot.narrative - nextNarrative) > 0.00001
+      || Math.abs(this.snapshot.pageProgress - nextPageProgress) > 0.00001;
+
     this.snapshot.activeIndex = safeIndex;
     this.snapshot.chapter = CHAPTER_IDS[safeIndex];
-    this.snapshot.localProgress = Math.min(1, Math.max(0, localProgress));
-    this.snapshot.narrative = narrativeOverride === undefined
-      ? safeIndex + this.snapshot.localProgress
-      : Math.min(CHAPTER_IDS.length, Math.max(0, narrativeOverride));
-    this.snapshot.pageProgress = Math.min(1, Math.max(0, pageProgress));
+    this.snapshot.localProgress = nextLocalProgress;
+    this.snapshot.narrative = nextNarrative;
+    this.snapshot.pageProgress = nextPageProgress;
+    if (changed) this.notify();
   }
 
   setEnvironment(values: Partial<Pick<SceneSnapshot, "reducedMotion" | "mobile" | "compact" | "visible">>) {
+    const changed = Object.entries(values).some(([key, value]) => (
+      this.snapshot[key as keyof SceneSnapshot] !== value
+    ));
+    if (!changed) return;
     Object.assign(this.snapshot, values);
     this.notify();
   }

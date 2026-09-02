@@ -36,6 +36,8 @@ export function initMotionSystem(root: HTMLElement, director: SceneDirector) {
   const spatialScenes = queryAll<HTMLElement>(root, "[data-spatial-scene]");
   const copyCharacterGroups = sections.map((section) => queryAll<HTMLElement>(section, "[data-copy-char]"));
   const activeTimers = new Set<Pausable>();
+  let documentVisible = !document.hidden;
+  let storyVisible = true;
   let activeIndex = -1;
   let initialFrame = 0;
   let settleFrame = 0;
@@ -43,8 +45,19 @@ export function initMotionSystem(root: HTMLElement, director: SceneDirector) {
   let hasPlayedProductIntro = false;
   let hasPlayedWaveReveal = false;
 
+  const syncPlaybackState = () => {
+    const visible = documentVisible && storyVisible;
+    root.classList.toggle("is-page-hidden", !documentVisible);
+    director.setEnvironment({ visible });
+    activeTimers.forEach((timer) => {
+      if (!visible) timer.pause?.();
+      else if (!timer.completed) timer.resume?.();
+    });
+  };
+
   const track = <T extends Pausable>(item: T) => {
     activeTimers.add(item);
+    if (!documentVisible || !storyVisible) item.pause?.();
     return item;
   };
 
@@ -82,6 +95,11 @@ export function initMotionSystem(root: HTMLElement, director: SceneDirector) {
     const maximumScroll = Math.max(1, document.documentElement.scrollHeight - viewportHeight);
     const pageProgress = clamp01(window.scrollY / maximumScroll);
     const sectionRects = sections.map((section) => section.getBoundingClientRect());
+    const nextStoryVisible = sectionRects.some((rect) => rect.bottom > 0 && rect.top < viewportHeight);
+    if (nextStoryVisible !== storyVisible) {
+      storyVisible = nextStoryVisible;
+      syncPlaybackState();
+    }
     const sectionProgresses = sectionRects.map((rect, index) => {
       // Serve's editorial sequence advances by one viewport per message while
       // the product canvas stays pinned behind it. Use the section's own
@@ -365,7 +383,10 @@ export function initMotionSystem(root: HTMLElement, director: SceneDirector) {
       if (!hasPlayedIllumination) {
         hasPlayedIllumination = true;
         director.snapshot.illumination = 0;
-        const intro = keep(createTimeline({ defaults: { ease: "outExpo" } }));
+        const intro = keep(createTimeline({
+          defaults: { ease: "outExpo" },
+          onUpdate: () => director.invalidate(),
+        }));
         intro
           .add(director.snapshot, {
             illumination: 0.34,
@@ -448,6 +469,7 @@ export function initMotionSystem(root: HTMLElement, director: SceneDirector) {
         ease: "inOutSine",
         loop: Infinity,
         loopDelay: 0,
+        frameRate: compact ? 24 : 30,
       }));
 
       keep(animate(".outgoing-wave-flow", {
@@ -458,6 +480,7 @@ export function initMotionSystem(root: HTMLElement, director: SceneDirector) {
         delay: stagger(compact ? 140 : 210, { from: "first" }),
         ease: "linear",
         loop: true,
+        frameRate: 24,
       }));
 
       keep(animate(".outgoing-wave-lane", {
@@ -471,6 +494,7 @@ export function initMotionSystem(root: HTMLElement, director: SceneDirector) {
         ease: "inOutSine",
         loop: Infinity,
         loopDelay: 0,
+        frameRate: compact ? 24 : 30,
       }));
 
       const guideRings = queryAll<SVGCircleElement>(root, ".guide-target-ring");
@@ -520,13 +544,8 @@ export function initMotionSystem(root: HTMLElement, director: SceneDirector) {
   });
 
   const handleVisibility = () => {
-    const visible = !document.hidden;
-    root.classList.toggle("is-page-hidden", !visible);
-    director.setEnvironment({ visible });
-    activeTimers.forEach((timer) => {
-      if (!visible) timer.pause?.();
-      else if (!timer.completed) timer.resume?.();
-    });
+    documentVisible = !document.hidden;
+    syncPlaybackState();
   };
 
   document.addEventListener("visibilitychange", handleVisibility);

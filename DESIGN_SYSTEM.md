@@ -133,7 +133,7 @@
 - **拖拽：** `createDraggable` 提供真实拖拽，`createSpring` 只用于释放回中。
 - **Reduced motion：** 关闭空间位移、灯光扫动与滚动绘制；保留立即可读的最终状态，滚动行为改为 `auto`。
 - **页面隐藏：** 暂停 Anime.js 与 Three.js；恢复时不重播一次性动画。
-- **性能预算：** 桌面目标稳定 60fps，移动端自动降低 DPR、粒子/刻度和后期效果；动画只改变 transform、opacity、SVG draw 或 Three.js 对象属性。目标 LCP <2.5s、CLS <0.1、INP <200ms，除非有真实测量不得声称已达到。
+- **性能预算：** 文档滚动和文字合成以浏览器原生刷新率运行；Three.js 不使用永久渲染循环，只在滚动叙事、灯光或视口发生变化时请求帧，并限制为桌面最高 36fps、紧凑布局最高 30fps。装饰粒子限制为桌面 72 / 紧凑布局 24，Anime.js 连续声波限制为 24–30fps；五个叙事章节全部离开视口或页面隐藏时，WebGL 与循环计时器全部暂停。动画只改变 transform、opacity、SVG draw 或 Three.js 对象属性。目标 LCP <2.5s、CLS <0.1、INP <200ms，除非有真实测量不得声称已达到。
 
 ## 11. 可访问性
 

@@ -352,7 +352,8 @@ export function WebGLStage({ director, onReady }: WebGLStageProps) {
 
     let disposed = false;
     let animationFrame = 0;
-    let lastCompactFrame = 0;
+    let lastRenderTime = 0;
+    let requestRender = () => undefined;
     let product: Group | null = null;
     let productSize = new Vector3(1.0481, 2.3196, 1);
     const parts: ExplodablePart[] = [];
@@ -417,7 +418,7 @@ export function WebGLStage({ director, onReady }: WebGLStageProps) {
     interiorGlow.target = interiorTarget;
     scene.add(ambient, hemisphere, key, fill, rim, interiorGlow, interiorTarget);
 
-    const particles = createParticles(director.snapshot.compact ? 42 : 160);
+    const particles = createParticles(director.snapshot.compact ? 24 : 72);
     scene.add(particles);
 
     const resize = () => {
@@ -427,6 +428,7 @@ export function WebGLStage({ director, onReady }: WebGLStageProps) {
       camera.updateProjectionMatrix();
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, director.snapshot.compact ? 1 : 1.25));
       renderer.setSize(width, height, false);
+      requestRender();
     };
 
     const resizeObserver = new ResizeObserver(resize);
@@ -553,6 +555,7 @@ export function WebGLStage({ director, onReady }: WebGLStageProps) {
 
         setStatus("loaded");
         onReady?.("loaded");
+        requestRender();
       },
       undefined,
       (error) => {
@@ -565,13 +568,21 @@ export function WebGLStage({ director, onReady }: WebGLStageProps) {
     );
 
     const render = (time: number) => {
-      animationFrame = 0;
-      if (disposed || !director.snapshot.visible) return;
-      if (director.snapshot.compact && time - lastCompactFrame < 1000 / 40) {
+      if (disposed || !director.snapshot.visible) {
+        animationFrame = 0;
+        return;
+      }
+
+      // The booth only changes when scroll state, lighting or viewport size
+      // changes. Cap those requested renders so an expensive GLB frame cannot
+      // monopolise the main thread and make the native document scroll stutter.
+      const frameInterval = 1000 / (director.snapshot.compact ? 30 : 36);
+      if (lastRenderTime && time - lastRenderTime < frameInterval) {
         animationFrame = requestAnimationFrame(render);
         return;
       }
-      lastCompactFrame = time;
+      animationFrame = 0;
+      lastRenderTime = time;
 
       const state = director.snapshot;
       const explode = state.reducedMotion ? 0 : explosionFor(state.narrative);
@@ -869,19 +880,24 @@ export function WebGLStage({ director, onReady }: WebGLStageProps) {
       particles.rotation.y = state.reducedMotion ? 0 : time * 0.000012;
       particles.position.x = product?.position.x ?? 0;
       renderer.render(scene, camera);
-      animationFrame = requestAnimationFrame(render);
     };
 
-    const startOrStop = () => {
-      if (director.snapshot.visible && !animationFrame) animationFrame = requestAnimationFrame(render);
+    requestRender = () => {
+      if (!disposed && director.snapshot.visible && !animationFrame) {
+        animationFrame = requestAnimationFrame(render);
+      }
+    };
+
+    const syncRenderState = () => {
+      if (director.snapshot.visible) requestRender();
       if (!director.snapshot.visible && animationFrame) {
         cancelAnimationFrame(animationFrame);
         animationFrame = 0;
       }
     };
 
-    const unsubscribe = director.subscribe(startOrStop);
-    animationFrame = requestAnimationFrame(render);
+    const unsubscribe = director.subscribe(syncRenderState);
+    requestRender();
 
     return () => {
       disposed = true;
