@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.netlify/
+.playwright-cli/
+output/
+outputs/
+tmp/
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local QA captures and OS/editor files
+design-qa-*.png
+.DS_Store
+Thumbs.db
+*.log
+

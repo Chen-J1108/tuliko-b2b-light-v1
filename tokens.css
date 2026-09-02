@@ -1,0 +1,146 @@
+:root {
+  color-scheme: light;
+
+  /* Quiet industrial palette: warm carbon, paper-white, safety red, acoustic sage. */
+  --color-paper: #faf7f1;
+  --color-paper-deep: #faf7f1;
+  --color-surface: #faf7f1;
+  --color-surface-raised: #faf7f1;
+  --color-ink: oklch(28% 0.014 62);
+  --color-ink-soft: oklch(42% 0.014 62);
+  --color-ink-muted: oklch(55% 0.014 62);
+  --color-rule: oklch(78% 0.014 72);
+  --color-rule-strong: oklch(62% 0.018 66);
+  --color-accent: oklch(48% 0.075 32);
+  --color-accent-hot: oklch(60% 0.09 42);
+  --color-focus: oklch(54% 0.105 58);
+  --color-sage: oklch(51% 0.048 151);
+  --color-sage-light: oklch(78% 0.035 151);
+  --color-wave-red-dark: oklch(44% 0.08 32);
+  --color-wave-red: oklch(53% 0.09 32);
+  --color-wave-red-warm: oklch(64% 0.09 48);
+  --color-wave-sage-bright: oklch(88% 0.025 156);
+  --color-wave-sage: oklch(65% 0.045 151);
+  --color-wave-sage-muted: oklch(56% 0.04 151);
+  --color-label: oklch(38% 0.012 62);
+  --color-shadow: oklch(22% 0.012 62);
+  --mask-opaque: #000;
+
+  /* Channel aliases allow tuned alpha values without off-system one-off colors. */
+  --rgb-paper: 250 247 241;
+  --rgb-ink: 58 52 45;
+  --rgb-shadow: 34 30 26;
+  --rgb-shadow-green: 42 51 43;
+  --rgb-accent: 143 74 59;
+  --rgb-accent-soft: 170 104 85;
+  --rgb-accent-warm: 185 132 82;
+  --rgb-accent-edge: 197 147 103;
+  --rgb-sage: 95 122 103;
+  --rgb-sage-mid: 126 153 133;
+  --rgb-sage-soft: 160 183 165;
+  --rgb-sage-light: 195 211 198;
+  --rgb-sage-bright: 225 234 226;
+  --rgb-sage-pale: 241 246 241;
+  --rgb-sage-line: 183 199 187;
+
+  --sound-haze: rgb(var(--rgb-accent) / 0.115);
+  --meter-track: rgb(var(--rgb-ink) / 0.09);
+  --meter-loud-start: rgb(var(--rgb-accent) / 0.72);
+  --meter-loud-end: rgb(var(--rgb-accent-warm) / 0.96);
+  --meter-loud-glow: rgb(var(--rgb-accent) / 0.22);
+  --meter-quiet-start: rgb(var(--rgb-sage-mid) / 0.7);
+  --meter-quiet-end: rgb(var(--rgb-sage-light) / 0.9);
+  --meter-quiet-glow: rgb(var(--rgb-sage-soft) / 0.12);
+  --wave-in-baseline: rgb(var(--rgb-accent-soft) / 0.14);
+  --wave-in-glow: rgb(var(--rgb-accent) / 0.28);
+  --wave-in-glow-soft: rgb(var(--rgb-accent) / 0.11);
+  --wave-in-boundary: rgb(var(--rgb-accent-edge) / 0.42);
+  --wave-out-glow: rgb(var(--rgb-sage-soft) / 0.12);
+  --interior-wash-start: rgb(var(--rgb-sage-bright) / 0.16);
+  --interior-wash-end: rgb(var(--rgb-sage) / 0.035);
+  --glass-wave-glow: rgb(var(--rgb-sage-light) / 0.14);
+  --glass-wave-baseline: rgb(var(--rgb-sage-bright) / 0.1);
+  --glass-wave-path: rgb(var(--rgb-sage-bright) / 0.48);
+  --glass-reflection-strong: rgb(var(--rgb-sage-pale) / 0.52);
+  --glass-reflection-medium: rgb(var(--rgb-sage-pale) / 0.25);
+  --glass-reflection-soft: rgb(var(--rgb-sage-pale) / 0.15);
+  --glass-reflection-faint: rgb(var(--rgb-sage-pale) / 0.08);
+  --guide-line: rgb(var(--rgb-shadow-green) / 0.46);
+  --guide-ring-fill: rgb(var(--rgb-paper) / 0.94);
+  --guide-ring-stroke: rgb(var(--rgb-accent) / 0.9);
+  --guide-dot-stroke: rgb(var(--rgb-shadow-green) / 0.94);
+  --label-shadow: rgb(var(--rgb-paper) / 0.9);
+  --drag-sage-haze: rgb(var(--rgb-sage) / 0.2);
+  --drag-track-surface: rgb(var(--rgb-ink) / 0.028);
+  --drag-accent-line: rgb(var(--rgb-accent) / 0.34);
+  --drag-sage-line: rgb(var(--rgb-sage-light) / 0.28);
+  --drag-sage-border: rgb(var(--rgb-sage-bright) / 0.58);
+  --drag-shadow-color: rgb(var(--rgb-accent) / calc(0.08 + var(--drag-energy, 0) * 0.22));
+
+  --module-frame: oklch(68.5% 0.195 29);
+  --module-panel: oklch(78% 0.155 55);
+  --module-glass: oklch(79% 0.105 190);
+  --module-acoustic: oklch(82% 0.14 126);
+  --module-furniture: oklch(67% 0.13 292);
+
+  /* Compatibility aliases used by the existing WebGL narrative layer. */
+  --page: var(--color-paper);
+  --page-deep: var(--color-paper-deep);
+  --surface: color-mix(in oklch, var(--color-surface) 94%, transparent);
+  --surface-solid: var(--color-surface);
+  --line: color-mix(in oklch, var(--color-ink) 14%, transparent);
+  --line-strong: color-mix(in oklch, var(--color-ink) 27%, transparent);
+  --text: var(--color-ink);
+  --text-soft: var(--color-ink-soft);
+  --text-muted: var(--color-ink-muted);
+  --accent: var(--color-accent);
+  --sage: var(--color-sage);
+
+  --font-display: "DINish", "Yu Gothic", "Hiragino Sans", "Meiryo", sans-serif;
+  --font-body: "DINish", "Yu Gothic", "Hiragino Sans", "Meiryo", sans-serif;
+  --font-mono: "Berkeley Mono", "Yu Gothic", monospace;
+
+  --type-display: clamp(3.25rem, 5.2vw, 5.125rem);
+  --type-h2: clamp(2.75rem, 4.45vw, 4.375rem);
+  --type-h3: clamp(1.5rem, 2.1vw, 2rem);
+  --type-body-lg: clamp(1rem, 1.2vw, 1.1875rem);
+  --type-body: clamp(1rem, 1.05vw, 1.125rem);
+  --type-body-sm: 0.875rem;
+  --type-caption: 0.6875rem;
+  --type-button: 0.8125rem;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-round: 999px;
+  --radius: var(--radius-md);
+
+  --dur-instant: 100ms;
+  --dur-short: 180ms;
+  --dur-medium: 280ms;
+  --dur-long: 480ms;
+  --dur-stage: 620ms;
+  --dur-stage-long: 680ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-stage: cubic-bezier(0.22, 0.72, 0.2, 1);
+
+  --shadow-panel: 0 14px 34px color-mix(in oklch, var(--color-shadow) 14%, transparent);
+  --z-canvas: 1;
+  --z-overlay: 2;
+  --z-content: 4;
+  --z-header: 30;
+  --z-progress: 40;
+  --z-grain: 90;
+}

@@ -1,0 +1,188 @@
+{
+  "generatedAt": "2026-08-12T05:11:30.434Z",
+  "manifestId": "SNAPOD-S-W1000D1000H2300-LH-v1",
+  "fingerprintVersion": 1,
+  "sourceFile": "Snapod(小号)静音仓-W1000D1000H2300-总装 - 门樘-固定桌板-常规线路-可拆侧板.stp",
+  "sourceSha256": "79ab7e5de60f5f7329a8d52c12e3778229ad92424691b7e2e64c09561d25d6f8",
+  "sourceBytes": 13644955,
+  "dimensionsMeters": [
+    1.0481,
+    2.3196,
+    1
+  ],
+  "sourceMeshes": 242,
+  "triangles": 382145,
+  "modules": [
+    {
+      "id": "base",
+      "label": "底座・換気",
+      "meshCount": 42,
+      "triangleCount": 67604,
+      "installRange": [
+        0,
+        0
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "frame-core",
+      "label": "構造フレーム",
+      "meshCount": 4,
+      "triangleCount": 20912,
+      "installRange": [
+        0.02,
+        0.14
+      ],
+      "explodeOffset": [
+        0,
+        0.46,
+        0
+      ]
+    },
+    {
+      "id": "rear-wall",
+      "label": "背面吸音パネル",
+      "meshCount": 58,
+      "triangleCount": 37252,
+      "installRange": [
+        0.16,
+        0.32
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        -0.78
+      ]
+    },
+    {
+      "id": "service-wall",
+      "label": "設備側パネル",
+      "meshCount": 40,
+      "triangleCount": 18644,
+      "installRange": [
+        0.24,
+        0.4
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0.78
+      ]
+    },
+    {
+      "id": "fixed-glass",
+      "label": "固定ガラス",
+      "meshCount": 16,
+      "triangleCount": 15748,
+      "installRange": [
+        0.34,
+        0.5
+      ],
+      "explodeOffset": [
+        0.72,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "roof",
+      "label": "トップユニット",
+      "meshCount": 42,
+      "triangleCount": 149400,
+      "installRange": [
+        0.5,
+        0.62
+      ],
+      "explodeOffset": [
+        0,
+        0.78,
+        0
+      ]
+    },
+    {
+      "id": "door-jamb",
+      "label": "ドア枠",
+      "meshCount": 10,
+      "triangleCount": 24610,
+      "installRange": [
+        0.62,
+        0.72
+      ],
+      "explodeOffset": [
+        -0.46,
+        0,
+        -0.03
+      ]
+    },
+    {
+      "id": "door-leaf",
+      "label": "ドアユニット",
+      "meshCount": 25,
+      "triangleCount": 38911,
+      "installRange": [
+        0.68,
+        0.88
+      ],
+      "explodeOffset": [
+        -0.86,
+        0,
+        -0.08
+      ]
+    },
+    {
+      "id": "column-covers",
+      "label": "コーナーカバー",
+      "meshCount": 4,
+      "triangleCount": 2464,
+      "installRange": [
+        0.86,
+        0.94
+      ],
+      "explodeOffset": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "carpet",
+      "label": "床カーペット",
+      "meshCount": 1,
+      "triangleCount": 6600,
+      "installRange": [
+        0.94,
+        1
+      ],
+      "explodeOffset": [
+        0,
+        -0.34,
+        0.34
+      ]
+    }
+  ],
+  "doorJoint": {
+    "pivotMeters": [
+      -0.456749,
+      0,
+      -0.408
+    ],
+    "axis": [
+      0,
+      1,
+      0
+    ],
+    "openAngleDegrees": -72
+  },
+  "animation": {
+    "clip": "SNAPOD_INSTALL_V1",
+    "durationSeconds": 10,
+    "direction": "disassembled-to-assembled"
+  },
+  "rawGlbBytes": 11141920,
+  "optimizedGlbBytes": 2180508,
+  "compression": "EXT_meshopt_compression"
+}
