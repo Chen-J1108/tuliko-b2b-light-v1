@@ -547,7 +547,7 @@ export function WebGLStage({ director, onReady }: WebGLStageProps) {
         registerGuideAnchor("columns", semanticParts.get("frame-core-xp-zp") || modules.get("frame-core"), new Vector3(0.5, 0.74, 0.5));
         registerGuideAnchor("sidePanel", semanticParts.get("service-wall-outer-skin") || modules.get("service-wall"), new Vector3(0.5, 0.61, 0.5));
         registerGuideAnchor("frontDoor", modules.get("door-leaf"), new Vector3(0.5, 0.43, 0.5));
-        registerGuideAnchor("fixedGlass", modules.get("fixed-glass"), new Vector3(0.5, 0.69, 0.5));
+        registerGuideAnchor("fixedGlass", semanticParts.get("fixed-glass-assembly") || modules.get("fixed-glass"), new Vector3(0.5, 0.69, 0.5));
         registerGuideAnchor("acousticPanel", semanticParts.get("rear-wall-inner-skin") || modules.get("rear-wall"), new Vector3(0.5, 0.27, 0.5));
         registerGuideAnchor("desk", deskTarget, new Vector3(0.72, 0.5, 0.32));
         registerGuideAnchor("carpet", modules.get("carpet"));

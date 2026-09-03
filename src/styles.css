@@ -1400,8 +1400,8 @@ a {
 
 .guide-line {
   fill: none;
-  stroke: color-mix(in oklch, var(--color-ink) 34%, var(--color-sage));
-  stroke-width: 0.9;
+  stroke: color-mix(in oklch, var(--color-ink) 42%, var(--color-sage));
+  stroke-width: 0.85;
   stroke-linecap: butt;
   stroke-linejoin: miter;
   vector-effect: non-scaling-stroke;
@@ -1415,8 +1415,8 @@ a {
   position: absolute;
   left: 0;
   top: 0;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   overflow: visible;
   opacity: 0;
   transform: translate3d(var(--target-x), var(--target-y), 0) translate(-50%, -50%);
@@ -1433,7 +1433,7 @@ a {
 .guide-target-ring {
   fill: var(--guide-ring-fill);
   stroke: var(--guide-ring-stroke);
-  stroke-width: 1.2;
+  stroke-width: 1.05;
 }
 
 .guide-target-dot {

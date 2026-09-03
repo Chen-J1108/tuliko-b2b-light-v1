@@ -36,16 +36,16 @@ const sitePages = [
 ] as const;
 
 const partLabels = [
-  { id: "lighting", name: "天井照明", x: 85.5, y: 31, mobile: [85, 27], anchor: "right", fallback: [61, 9] },
-  { id: "roof", name: "天板", x: 85.5, y: 38.6, mobile: [85, 30], anchor: "right", fallback: [58, 10] },
-  { id: "columns", name: "構造支柱", x: 85.5, y: 46.2, mobile: [85, 33], anchor: "right", fallback: [60, 40] },
-  { id: "fixedGlass", name: "固定ガラス", x: 85.5, y: 53.8, mobile: [85, 36], anchor: "right", fallback: [67, 48] },
-  { id: "sidePanel", name: "外装パネル", x: 24, y: 72, mobile: [18, 75], anchor: "left", fallback: [40, 48] },
-  { id: "frontDoor", name: "フロントドア", x: 24, y: 75, mobile: [18, 78], anchor: "left", fallback: [49, 49] },
-  { id: "acousticPanel", name: "吸音パネル", x: 24, y: 78, mobile: [18, 81], anchor: "left", fallback: [43, 48] },
-  { id: "desk", name: "固定デスク", x: 85.5, y: 61.4, mobile: [85, 39], anchor: "right", fallback: [70, 50] },
-  { id: "carpet", name: "床カーペット", x: 24, y: 81, mobile: [18, 84], anchor: "left", fallback: [55, 79] },
-  { id: "base", name: "床ベース", x: 85.5, y: 69, mobile: [85, 42], anchor: "right", fallback: [58, 73] },
+  { id: "lighting", name: "天井照明", x: 85.5, y: 31, mobile: [85, 27], anchor: "right", registerOrder: 0, fallback: [61, 9] },
+  { id: "roof", name: "天板", x: 85.5, y: 38.6, mobile: [85, 30], anchor: "right", registerOrder: 1, fallback: [58, 10] },
+  { id: "columns", name: "構造支柱", x: 85.5, y: 53.8, mobile: [85, 33], anchor: "right", registerOrder: 3, fallback: [60, 40] },
+  { id: "fixedGlass", name: "固定ガラス", x: 24, y: 83.5, mobile: [18, 36], anchor: "left", registerOrder: 2, fallback: [47, 48] },
+  { id: "sidePanel", name: "外装パネル", x: 85.5, y: 46.2, mobile: [85, 75], anchor: "right", registerOrder: 2, fallback: [64, 48] },
+  { id: "frontDoor", name: "フロントドア", x: 24, y: 79.75, mobile: [18, 78], anchor: "left", registerOrder: 1, fallback: [49, 49] },
+  { id: "acousticPanel", name: "吸音パネル", x: 24, y: 87.25, mobile: [18, 81], anchor: "left", registerOrder: 3, fallback: [43, 48] },
+  { id: "desk", name: "固定デスク", x: 24, y: 76, mobile: [18, 39], anchor: "left", registerOrder: 0, fallback: [42, 50] },
+  { id: "carpet", name: "床カーペット", x: 24, y: 84, mobile: [18, 84], anchor: "left", registerOrder: 4, fallback: [55, 79] },
+  { id: "base", name: "床ベース", x: 85.5, y: 61.4, mobile: [85, 42], anchor: "right", registerOrder: 4, fallback: [58, 73] },
 ] as const;
 
 // Pick stable vertical attachment zones inside tall parts. Their projected
@@ -324,6 +324,7 @@ function StructureGuides() {
           let previousY = Number.NEGATIVE_INFINITY;
           partLabels
             .filter((part) => part.anchor === side)
+            .sort((a, b) => a.registerOrder - b.registerOrder)
             .forEach((part) => {
               const entry = resolvedTargets.find(({ target }) => target.id === part.id);
               if (!entry) return;
@@ -379,18 +380,18 @@ function StructureGuides() {
           {
             side: "right",
             labelX: rightLabelX,
-            // Centre the six structural names against the product rather than
+            // Centre the five structural names against the product rather than
             // stacking them over its roof. This creates a direct, short
             // hand-off from the register to the live semantic edge while the
             // complete column still clears the progress-rail gutter.
             minY: 31,
-            maxY: 69,
+            maxY: 61.4,
           },
           {
             side: "left",
             labelX: leftLabelX,
-            minY: 82,
-            maxY: 92,
+            minY: 76,
+            maxY: 91,
           },
         ];
 
@@ -400,6 +401,7 @@ function StructureGuides() {
           // without letting a part jump to the opposite annotation register.
           const orderedEntries = partLabels
             .filter((part) => part.anchor === side)
+            .sort((a, b) => a.registerOrder - b.registerOrder)
             .flatMap((part) => resolvedTargets.filter((entry) => (
               entry.part.id === part.id && entry.target.visible
             )));
@@ -423,7 +425,64 @@ function StructureGuides() {
         });
       }
 
-      resolvedTargets.forEach(({ target, part, targetPixelX, targetPixelY }) => {
+      const semanticEndpointX = new Map<StructureGuideId, number>();
+      const partClearance = 10;
+      if (!isCompact) {
+        resolvedTargets.forEach(({ part, targetPixelLeft, targetPixelRight }) => {
+          semanticEndpointX.set(
+            part.id,
+            part.anchor === "left"
+              ? Math.max(0, targetPixelLeft - partClearance)
+              : Math.min(bounds.width, targetPixelRight + partClearance),
+          );
+        });
+      }
+
+      const approachPixelX = new Map<"left" | "right", number>();
+      const registerKneePixelX = new Map<"left" | "right", number>();
+      if (!isCompact) {
+        (["left", "right"] as const).forEach((side) => {
+          const sideEndpoints = partLabels
+            .filter((part) => part.anchor === side)
+            .map((part) => semanticEndpointX.get(part.id))
+            .filter((value): value is number => value !== undefined);
+          if (!sideEndpoints.length) return;
+          const labelPixelX = ((side === "left" ? 23 : 85.5) / 100) * bounds.width;
+          const desiredRun = Math.max(88, Math.min(160, bounds.width * 0.08));
+          const nearestEndpoint = side === "left"
+            ? Math.min(...sideEndpoints)
+            : Math.max(...sideEndpoints);
+          const availableRun = side === "left"
+            ? nearestEndpoint - labelPixelX
+            : labelPixelX - nearestEndpoint;
+          // During the assembled entry some targets sit close to the label
+          // register. Contract both shared columns into that free corridor so
+          // terminal strokes never fold back across the diagonal bundle.
+          const registerRun = Math.max(12, Math.min(desiredRun, availableRun * 0.42));
+          const kneePixelX = side === "left"
+            ? labelPixelX + registerRun
+            : labelPixelX - registerRun;
+          registerKneePixelX.set(side, kneePixelX);
+          const remainingRun = Math.max(0, side === "left"
+            ? nearestEndpoint - kneePixelX
+            : kneePixelX - nearestEndpoint);
+          approachPixelX.set(
+            side,
+            side === "left"
+              ? kneePixelX + remainingRun * 0.52
+              : kneePixelX - remainingRun * 0.52,
+          );
+        });
+      }
+
+      resolvedTargets.forEach(({
+        target,
+        part,
+        targetPixelX,
+        targetPixelY,
+        targetPixelLeft,
+        targetPixelRight,
+      }) => {
         const line = root.querySelector<SVGPathElement>(`[data-guide-line="${target.id}"]`);
         const endpoint = root.querySelector<SVGSVGElement>(`[data-guide-endpoint="${target.id}"]`);
         const label = root.querySelector<HTMLElement>(`[data-part-label="${target.id}"]`);
@@ -446,17 +505,25 @@ function StructureGuides() {
         line.style.opacity = opacity;
         endpoint?.style.setProperty("opacity", opacity);
         if (!isCompact && laneOffset !== undefined) {
-          // Keep each register on its own side of the complete live product
-          // boundary. The vertical target still identifies the semantic part,
-          // but no leader enters the product or crosses the opposite register.
-          const exitPixelX = side === "left" ? outerLeft : outerRight;
-          const exitX = (exitPixelX / bounds.width) * 640;
-          const laneX = startX + (laneOffset / bounds.width) * 640;
-          // Match the reference's two-segment technical leaders: a stable
-          // horizontal register line followed by one diagonal segment whose
-          // endpoint tracks the live semantic part. Text and bend stay fixed.
-          line.setAttribute("d", `M${startX} ${startY} H${laneX} L${exitX} ${targetY}`);
-          endpoint?.style.setProperty("--target-x", `${exitPixelX}px`);
+          // Attach each leader to the outside edge of its own semantic part,
+          // not to the union boundary of the whole exploded product. This
+          // preserves the authored label registers while making the callout
+          // unambiguous at every point in the explode/reassemble sequence.
+          const labelPixelX = (labelX / 100) * bounds.width;
+          const endpointPixelX = semanticEndpointX.get(part.id) ?? (side === "left"
+            ? Math.max(0, targetPixelLeft - partClearance)
+            : Math.min(bounds.width, targetPixelRight + partClearance));
+          // All leaders on a register share one bend column. With both the
+          // label rows and target rows kept in order, this guarantees the
+          // diagonals cannot weave through one another while the model moves.
+          const kneePixelX = registerKneePixelX.get(side) ?? labelPixelX;
+          const endpointX = (endpointPixelX / bounds.width) * 640;
+          const kneeX = (kneePixelX / bounds.width) * 640;
+          const approachX = ((approachPixelX.get(side) ?? endpointPixelX) / bounds.width) * 640;
+          // A common approach column keeps the diagonals ordered. The short
+          // terminal segment then lands on the exact semantic part edge.
+          line.setAttribute("d", `M${startX} ${startY} H${kneeX} L${approachX} ${targetY} H${endpointX}`);
+          endpoint?.style.setProperty("--target-x", `${endpointPixelX}px`);
           endpoint?.style.setProperty("--target-y", `${targetPixelY}px`);
           label?.style.setProperty("--label-y", `${labelY}%`);
           label?.style.setProperty("--label-x", `${labelX}%`);
