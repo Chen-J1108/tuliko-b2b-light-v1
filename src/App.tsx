@@ -804,6 +804,8 @@ interface ProductVariant {
 interface ProductSkuConfig {
   sku: ProductSku;
   label: string;
+  frontImage: string;
+  frontColor: ProductColor;
   variants: readonly ProductVariant[];
 }
 
@@ -811,6 +813,8 @@ const productSkus: readonly ProductSkuConfig[] = [
   {
     sku: "SPD01",
     label: "一人用・直線デスク",
+    frontImage: "/assets/products/catalog-views/spd01-front-grey-green.webp",
+    frontColor: "greyGreen",
     variants: [
       { color: "greyGreen", image: "/assets/products/catalog/spd01-grey-green.webp" },
       { color: "earthBrown", image: "/assets/products/catalog/spd01-earth-brown.webp" },
@@ -821,6 +825,8 @@ const productSkus: readonly ProductSkuConfig[] = [
   {
     sku: "SPD02",
     label: "一人用・L型デスク",
+    frontImage: "/assets/products/catalog-views/spd02-front-white.webp",
+    frontColor: "white",
     variants: [
       { color: "white", image: "/assets/products/catalog/spd02-white.webp" },
       { color: "khaki", image: "/assets/products/catalog/spd02-khaki.webp" },
@@ -830,6 +836,8 @@ const productSkus: readonly ProductSkuConfig[] = [
   {
     sku: "SPD03",
     label: "一人用・昇降デスク",
+    frontImage: "/assets/products/catalog-views/spd03-front-gloss-grey.webp",
+    frontColor: "glossGrey",
     variants: [
       { color: "ars", image: "/assets/products/catalog/spd03-ars.webp" },
       { color: "gxs", image: "/assets/products/catalog/spd03-gxs.webp" },
@@ -839,6 +847,8 @@ const productSkus: readonly ProductSkuConfig[] = [
   {
     sku: "SPD04",
     label: "一人用・ラウンジチェア",
+    frontImage: "/assets/products/catalog-views/spd04-front-grey-green.webp",
+    frontColor: "greyGreen",
     variants: [
       { color: "greyGreen", image: "/assets/products/catalog/spd04-grey-green.webp" },
       { color: "earthBrown", image: "/assets/products/catalog/spd04-earth-brown.webp" },
@@ -848,6 +858,8 @@ const productSkus: readonly ProductSkuConfig[] = [
   {
     sku: "SPD07",
     label: "二人用・ミーティング",
+    frontImage: "/assets/products/catalog-views/spd07-front-white.webp",
+    frontColor: "white",
     variants: [
       { color: "white", image: "/assets/products/catalog/spd07-white.webp" },
       { color: "shadowGrey", image: "/assets/products/catalog/spd07-shadow-grey.webp" },
@@ -857,6 +869,8 @@ const productSkus: readonly ProductSkuConfig[] = [
   {
     sku: "SPD08",
     label: "二人用・昇降デスク",
+    frontImage: "/assets/products/catalog-views/spd08-front-gloss-grey.webp",
+    frontColor: "glossGrey",
     variants: [
       { color: "ars", image: "/assets/products/catalog/spd08-ars.webp" },
       { color: "gxs", image: "/assets/products/catalog/spd08-gxs.webp" },
@@ -867,6 +881,8 @@ const productSkus: readonly ProductSkuConfig[] = [
   {
     sku: "SPD09",
     label: "小型ミーティング",
+    frontImage: "/assets/products/catalog-views/spd09-front-white.webp",
+    frontColor: "white",
     variants: [
       { color: "ars", image: "/assets/products/catalog/spd09-ars.webp" },
       { color: "gxs", image: "/assets/products/catalog/spd09-gxs.webp" },
@@ -883,6 +899,8 @@ const productSkus: readonly ProductSkuConfig[] = [
   {
     sku: "SPD12",
     label: "中型ミーティング",
+    frontImage: "/assets/products/catalog-views/spd12-front-white.webp",
+    frontColor: "white",
     variants: [
       { color: "ars", image: "/assets/products/catalog/spd12-ars.webp" },
       { color: "gxs", image: "/assets/products/catalog/spd12-gxs.webp" },
@@ -899,6 +917,8 @@ const productSkus: readonly ProductSkuConfig[] = [
   {
     sku: "SPD14",
     label: "大型ミーティング",
+    frontImage: "/assets/products/catalog-views/spd14-front-grey-green.webp",
+    frontColor: "greyGreen",
     variants: [
       { color: "ars", image: "/assets/products/catalog/spd14-ars.webp" },
       { color: "gxs", image: "/assets/products/catalog/spd14-gxs.webp" },
@@ -960,13 +980,14 @@ function ProductSkuSection({ selection, onSelect }: ProductSkuSectionProps) {
               className="product-sku-stage-image"
               key={`${selectedProduct.sku}-${selectedVariant.color}`}
               src={selectedVariant.image}
-              alt={`${selectedProduct.sku} ${selectedColor.label} 製品全体画像`}
+              alt={`${selectedProduct.sku} ${selectedColor.label} 45度製品全体画像`}
               width="1600"
               height="1600"
             />
             <div className="product-sku-stage-label" aria-hidden="true">
               <span>{String(selectedIndex + 1).padStart(2, "0")}</span>
               <strong>{selectedProduct.sku}</strong>
+              <em>45° VIEW</em>
             </div>
           </div>
           <fieldset className="product-color-selector">
@@ -1012,12 +1033,13 @@ function ProductSkuSection({ selection, onSelect }: ProductSkuSectionProps) {
                 <span className="product-sku-option-body">
                   <span className="product-sku-option-image">
                     <img
-                      src={product.variants[0].image}
-                      alt={`${product.sku} ${productColors[product.variants[0].color].label} 製品一覧用画像`}
-                      width="1600"
+                      src={product.frontImage}
+                      alt={`${product.sku} ${productColors[product.frontColor].label} 正面製品全体画像`}
+                      width="1264"
                       height="1600"
                       loading="lazy"
                     />
+                    <small aria-hidden="true">正面</small>
                   </span>
                   <span className="product-sku-option-code">
                     <i>{String(index + 1).padStart(2, "0")}</i>

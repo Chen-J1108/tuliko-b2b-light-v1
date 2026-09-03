@@ -112,7 +112,7 @@
 
 - **品牌字标：** `public/assets/brand/tuliko-logo.png`，基于用户提供的手写字标提取为透明底 PNG，仅出现在页头、加载页与页脚；不带矩形底板，也不作为正文装饰。
 - **首屏产品：** `public/assets/products/spd01-green-transparent.webp` / 当前透明裁切资产，保持用户提供产品外观。
-- **咨询 SKU：** `public/assets/products/catalog/` 内共有 50 张网页用 WebP，来自用户提供的 `11、SNAPOD 单体图`、`12、SNAPOD 单体图`、`13、SNAPOD 单体图` 三个目录。每个“SKU × 文件名颜色”优先采用 `v2-¾`，缺失时采用普通 `¾`；SPD14 采用每组编号最小的代表图。源 PNG 不直接进入网页，WebP 最长边限制为 1600px。型号配置文案只翻译文件夹已有名称，不推断尺寸、人数上限或官方色号。
+- **咨询 SKU：** `public/assets/products/catalog/` 内共有 50 张网页用 WebP，来自用户提供的 `11、SNAPOD 单体图`、`12、SNAPOD 单体图`、`13、SNAPOD 单体图` 三个目录。每个“SKU × 文件名颜色”优先采用 `v2-¾`，缺失时采用普通 `¾`；SPD14 采用每组编号最小的代表图。主舞台按所选 SKU 与颜色使用对应三分之四视角产品图，并在容器内尽量放大但不得裁切轮廓。九宫格选项只使用 `public/assets/products/catalog-views/` 中 9 张完整正面图，统一底部基线、内部留白和“正面”视角标记，不得复用斜角图或用 CSS 伪造旋转视角。源 PNG 不直接进入网页，WebP 最长边限制为 1600px。型号配置文案只翻译文件夹已有名称，不推断尺寸、人数上限或官方色号。
 - **三维结构：** `public/assets/models/snapod-spd01-authoritative.glb`，来源于本地权威 STEP 的优化转换。
 - **产品视频：** `public/assets/video/spd01-structure-locked-v5.mp4`，H.264、854×480、24fps、30.05 秒，包含 AAC 立体声音轨；poster 为 `public/assets/video/spd01-structure-v5-poster.webp`。两者均来自用户提供的本地 SPD01 场景展示素材。原有四张时间点缩略图仅保留为未使用的归档资产，不进入当前页面结构。
 - **格式：** 浏览器只加载 WebP 与 GLB，不直接加载 STEP。
