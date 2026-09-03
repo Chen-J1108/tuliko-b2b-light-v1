@@ -1,23 +1,23 @@
 {
-  "generatedAt": "2026-08-12T05:11:30.434Z",
-  "manifestId": "SNAPOD-S-W1000D1000H2300-LH-v1",
-  "fingerprintVersion": 1,
-  "sourceFile": "Snapod(小号)静音仓-W1000D1000H2300-总装 - 门樘-固定桌板-常规线路-可拆侧板.stp",
-  "sourceSha256": "79ab7e5de60f5f7329a8d52c12e3778229ad92424691b7e2e64c09561d25d6f8",
-  "sourceBytes": 13644955,
+  "generatedAt": "2026-09-03T00:00:00.000Z",
+  "manifestId": "SNAPOD-S-W1000D1000H2300-WHITE-v2",
+  "fingerprintVersion": 2,
+  "sourceFile": "Snapod(小号)白色静音仓.glb",
+  "sourceSha256": "414654d6c767139f90f25105688c84d37fcae9d6a2369b6927f7d472b54c24f0",
+  "sourceBytes": 18231044,
   "dimensionsMeters": [
     1.0481,
     2.3196,
     1
   ],
-  "sourceMeshes": 242,
-  "triangles": 382145,
+  "sourceMeshes": 265,
+  "triangles": 353908,
   "modules": [
     {
       "id": "base",
       "label": "底座・換気",
-      "meshCount": 42,
-      "triangleCount": 67604,
+      "meshCount": 44,
+      "triangleCount": 43184,
       "installRange": [
         0,
         0
@@ -32,7 +32,7 @@
       "id": "frame-core",
       "label": "構造フレーム",
       "meshCount": 4,
-      "triangleCount": 20912,
+      "triangleCount": 18592,
       "installRange": [
         0.02,
         0.14
@@ -46,8 +46,8 @@
     {
       "id": "rear-wall",
       "label": "背面吸音パネル",
-      "meshCount": 58,
-      "triangleCount": 37252,
+      "meshCount": 72,
+      "triangleCount": 95654,
       "installRange": [
         0.16,
         0.32
@@ -61,8 +61,8 @@
     {
       "id": "service-wall",
       "label": "設備側パネル",
-      "meshCount": 40,
-      "triangleCount": 18644,
+      "meshCount": 39,
+      "triangleCount": 13806,
       "installRange": [
         0.24,
         0.4
@@ -76,8 +76,8 @@
     {
       "id": "fixed-glass",
       "label": "固定ガラス",
-      "meshCount": 16,
-      "triangleCount": 15748,
+      "meshCount": 21,
+      "triangleCount": 16912,
       "installRange": [
         0.34,
         0.5
@@ -91,8 +91,8 @@
     {
       "id": "roof",
       "label": "トップユニット",
-      "meshCount": 42,
-      "triangleCount": 149400,
+      "meshCount": 41,
+      "triangleCount": 110292,
       "installRange": [
         0.5,
         0.62
@@ -106,8 +106,8 @@
     {
       "id": "door-jamb",
       "label": "ドア枠",
-      "meshCount": 10,
-      "triangleCount": 24610,
+      "meshCount": 14,
+      "triangleCount": 19238,
       "installRange": [
         0.62,
         0.72
@@ -121,8 +121,8 @@
     {
       "id": "door-leaf",
       "label": "ドアユニット",
-      "meshCount": 25,
-      "triangleCount": 38911,
+      "meshCount": 24,
+      "triangleCount": 29294,
       "installRange": [
         0.68,
         0.88
@@ -137,7 +137,7 @@
       "id": "column-covers",
       "label": "コーナーカバー",
       "meshCount": 4,
-      "triangleCount": 2464,
+      "triangleCount": 2912,
       "installRange": [
         0.86,
         0.94
@@ -151,8 +151,8 @@
     {
       "id": "carpet",
       "label": "床カーペット",
-      "meshCount": 1,
-      "triangleCount": 6600,
+      "meshCount": 2,
+      "triangleCount": 4024,
       "installRange": [
         0.94,
         1
@@ -182,7 +182,7 @@
     "durationSeconds": 10,
     "direction": "disassembled-to-assembled"
   },
-  "rawGlbBytes": 11141920,
-  "optimizedGlbBytes": 2180508,
+  "rawGlbBytes": 14829220,
+  "optimizedGlbBytes": 2075796,
   "compression": "EXT_meshopt_compression"
 }

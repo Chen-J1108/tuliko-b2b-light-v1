@@ -39,7 +39,7 @@ import {
   type StructureGuideTarget,
 } from "../structure-guides";
 
-const MODEL_URL = "/assets/models/snapod-spd01-authoritative.glb?v=20260819-1";
+const MODEL_URL = "/assets/models/snapod-spd01-authoritative.glb?v=20260903-1";
 const PRODUCT_BOUNDARY_SIGNS = [-0.5, 0.5] as const;
 
 type PartKind =
