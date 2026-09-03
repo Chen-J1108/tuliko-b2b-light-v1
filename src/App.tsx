@@ -36,16 +36,16 @@ const sitePages = [
 ] as const;
 
 const partLabels = [
-  { id: "lighting", name: "天井照明", x: 82, y: 13, mobile: [85, 27], anchor: "right", fallback: [61, 9] },
-  { id: "roof", name: "天板", x: 82, y: 16, mobile: [85, 30], anchor: "right", fallback: [58, 10] },
-  { id: "columns", name: "構造支柱", x: 82, y: 19, mobile: [85, 33], anchor: "right", fallback: [60, 40] },
-  { id: "fixedGlass", name: "固定ガラス", x: 82, y: 22, mobile: [85, 36], anchor: "right", fallback: [67, 48] },
+  { id: "lighting", name: "天井照明", x: 85.5, y: 31, mobile: [85, 27], anchor: "right", fallback: [61, 9] },
+  { id: "roof", name: "天板", x: 85.5, y: 38.6, mobile: [85, 30], anchor: "right", fallback: [58, 10] },
+  { id: "columns", name: "構造支柱", x: 85.5, y: 46.2, mobile: [85, 33], anchor: "right", fallback: [60, 40] },
+  { id: "fixedGlass", name: "固定ガラス", x: 85.5, y: 53.8, mobile: [85, 36], anchor: "right", fallback: [67, 48] },
   { id: "sidePanel", name: "外装パネル", x: 24, y: 72, mobile: [18, 75], anchor: "left", fallback: [40, 48] },
   { id: "frontDoor", name: "フロントドア", x: 24, y: 75, mobile: [18, 78], anchor: "left", fallback: [49, 49] },
   { id: "acousticPanel", name: "吸音パネル", x: 24, y: 78, mobile: [18, 81], anchor: "left", fallback: [43, 48] },
-  { id: "desk", name: "固定デスク", x: 82, y: 25, mobile: [85, 39], anchor: "right", fallback: [70, 50] },
+  { id: "desk", name: "固定デスク", x: 85.5, y: 61.4, mobile: [85, 39], anchor: "right", fallback: [70, 50] },
   { id: "carpet", name: "床カーペット", x: 24, y: 81, mobile: [18, 84], anchor: "left", fallback: [55, 79] },
-  { id: "base", name: "床ベース", x: 82, y: 28, mobile: [85, 42], anchor: "right", fallback: [58, 73] },
+  { id: "base", name: "床ベース", x: 85.5, y: 69, mobile: [85, 42], anchor: "right", fallback: [58, 73] },
 ] as const;
 
 // Pick stable vertical attachment zones inside tall parts. Their projected
@@ -363,12 +363,12 @@ function StructureGuides() {
       root.dataset.productBottom = (boundary ? (canvasBounds?.top ?? 0) + boundary.bottom - bounds.top : bounds.height).toFixed(2);
 
       if (!isCompact) {
-        // Match the quiet technical layout used by the Anime.js reference:
-        // one fixed annotation register in the upper-right and one fixed in
-        // the lower-left. Product motion updates only the leader geometry.
+        // Keep one fixed, vertically centred annotation register to the right
+        // of the product and one fixed register in the lower-left. Product
+        // motion updates only the leader geometry, never the text positions.
         const labelGap = Math.max(24, Math.min(48, bounds.width * 0.04));
         const leftLabelX = 23;
-        const rightLabelX = 79;
+        const rightLabelX = 85.5;
         root.dataset.labelGap = labelGap.toFixed(2);
         const groups: Array<{
           side: "left" | "right";
@@ -379,11 +379,12 @@ function StructureGuides() {
           {
             side: "right",
             labelX: rightLabelX,
-            // Clear the fixed 72px header and keep the full register left of
-            // the transparent progress rail. Six rows retain at least a
-            // 24px rhythm on ordinary desktop heights.
-            minY: 13,
-            maxY: 29,
+            // Centre the six structural names against the product rather than
+            // stacking them over its roof. This creates a direct, short
+            // hand-off from the register to the live semantic edge while the
+            // complete column still clears the progress-rail gutter.
+            minY: 31,
+            maxY: 69,
           },
           {
             side: "left",

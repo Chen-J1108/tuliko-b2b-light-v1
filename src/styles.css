@@ -3615,7 +3615,10 @@ main {
   }
 
   .app[data-chapter="structure"] .webgl-mount {
-    transform: translate3d(0, clamp(44px, 8lvh, 68px), 0);
+    /* Leave a clear lane for the two-column component index and the global
+       progress rail. The former downward offset compressed all three layers
+       into the bottom edge on short phones. */
+    transform: translate3d(0, -20px, 0);
   }
 
   .site-header {
@@ -3839,7 +3842,7 @@ main {
   .mobile-part-index {
     position: absolute;
     right: 16px;
-    bottom: 18px;
+    bottom: max(68px, calc(60px + env(safe-area-inset-bottom)));
     left: 16px;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
