@@ -602,12 +602,16 @@ export function WebGLStage({ director, onReady }: WebGLStageProps) {
       const modularEntry = state.reducedMotion
         ? 1
         : smoothstep(rangeProgress(state.narrative, 3, 3.5));
-      // Ease the camera and product into the drafting view after the raster
-      // hero has started to crossfade. This prevents the 180° structure
-      // orientation from reading as a hard scene cut at the chapter boundary.
-      const structureEntry = isTechnicalStructure && !state.reducedMotion
-        ? smoothstep(rangeProgress(state.narrative, 1, 1.18))
-        : isTechnicalStructure ? 1 : 0;
+      // On desktop the drafting view owns one stable viewport-centred axis as
+      // soon as the technical chapter becomes active. The raster is already
+      // fading before this hand-off, so keeping an additional lateral camera
+      // transition here would temporarily render two booths in opposite
+      // gutters and let the callouts overlap the outgoing product.
+      const structureEntry = isTechnicalStructure
+        ? state.mobile && !state.reducedMotion
+          ? smoothstep(rangeProgress(state.narrative, 1, 1.18))
+          : 1
+        : 0;
       const diagonalSpread = isTechnicalStructure && !state.reducedMotion
         ? smoothstep(rangeProgress(state.narrative, 1.38, 1.58))
           * (1 - smoothstep(rangeProgress(state.narrative, 1.78, 2)))
@@ -740,7 +744,10 @@ export function WebGLStage({ director, onReady }: WebGLStageProps) {
           : state.chapter === "interaction" && !mobile
             ? productSize.x * 1.05
             : 0;
-        const structureFocusX = product.position.x + productSize.x * (structureTravel * 0.16);
+        // Keep the product origin on the screen axis throughout the orbit.
+        // A travel-dependent look-at offset made the assembled booth drift
+        // into the right annotation gutter near the end of the chapter.
+        const structureFocusX = product.position.x;
         const modularFocusX = sceneFocusX;
         const editorialFocusX = acousticEditorialView
           ? productSize.x * 1.05

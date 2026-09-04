@@ -232,13 +232,17 @@ export function initMotionSystem(root: HTMLElement, director: SceneDirector) {
         : 0;
     const rasterOpacity = director.snapshot.reducedMotion
       ? (heroModelMix < 0.5 ? 1 : 0)
-      : 1 - smoothstep(clamp01((heroModelMix - 0.14) / 0.62));
+      : 1 - smoothstep(rangeProgress(heroModelMix, 0.1, 0.42));
     const glbOpacity = director.snapshot.reducedMotion
       ? (heroModelMix >= 0.5 ? 1 : 0)
-      : smoothstep(clamp01((heroModelMix - 0.26) / 0.58));
+      : smoothstep(rangeProgress(heroModelMix, 0.24, 0.52));
     // Preserve the approved hero composition. Subsequent chapters retain the
     // lateral product hand-offs while the opening stays in its original lane.
-    const stageCenters = [68, 52, 68, 32, 68];
+    // The technical chapter uses the viewport axis as its single product
+    // anchor. Keeping the raster hand-off and the WebGL drafting view on the
+    // same centre line prevents a second booth silhouette from appearing in
+    // either annotation gutter during the crossfade.
+    const stageCenters = [68, 50, 68, 32, 68];
     const stageCenter = desktopLayout
       ? stageCenters[baseIndex] + (stageCenters[followingIndex] - stageCenters[baseIndex]) * transitionProgress
       : 50;

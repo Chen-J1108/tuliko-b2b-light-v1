@@ -356,7 +356,7 @@ a {
 }
 
 .app[data-chapter="hero"] { --stage-center-x: 68%; }
-.app[data-chapter="structure"] { --stage-center-x: 54%; }
+.app[data-chapter="structure"] { --stage-center-x: 50%; }
 .app[data-chapter="acoustic"] {
   --stage-center-x: 31%;
   --product-scene-filter: none;
@@ -1444,8 +1444,8 @@ a {
 
 .structure-section .chapter-copy {
   top: clamp(92px, 12vh, 122px);
-  left: clamp(64px, 14vw, 268px);
-  width: min(29vw, 360px);
+  left: clamp(56px, 6vw, 112px);
+  width: min(25vw, 330px);
 }
 
 .structure-section .chapter-copy h2 {
@@ -1636,8 +1636,8 @@ a {
 @media (min-width: 901px) and (max-width: 1180px) {
   .structure-section .chapter-copy {
     top: clamp(92px, 12vh, 116px);
-    left: clamp(64px, 14vw, 164px);
-    width: min(31vw, 320px);
+    left: clamp(40px, 5vw, 64px);
+    width: min(30vw, 300px);
   }
 
   .structure-section .chapter-copy > p {
