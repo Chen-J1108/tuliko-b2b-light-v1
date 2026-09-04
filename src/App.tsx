@@ -646,9 +646,36 @@ function HeroTitle() {
   );
 }
 
+interface SectionContinuationProps {
+  target: string;
+  index: string;
+  label: string;
+  detail: string;
+  className?: string;
+}
+
+function SectionContinuation({ target, index, label, detail, className = "" }: SectionContinuationProps) {
+  return (
+    <a
+      className={`section-continuation ${className}`.trim()}
+      href={`#${target}`}
+      aria-label={`次のセクション「${label}」へ進む`}
+    >
+      <span className="continuation-copy">
+        <small>NEXT · {index}</small>
+        <strong>{label}</strong>
+        <em>{detail}</em>
+      </span>
+      <span className="continuation-signal" aria-hidden="true">
+        <i />
+      </span>
+    </a>
+  );
+}
+
 function VerifiedTestSection() {
   return (
-    <section className="post-story-section verified-test-section" id="measurement" aria-labelledby="measurement-title">
+    <section className="post-story-section verified-test-section" id="measurement" data-next-target="consultation" aria-labelledby="measurement-title">
       <div className="verified-test-heading">
         <p className="post-section-index"><span>08</span> 試験・分類資料</p>
         <h2 id="measurement-title">第三者試験の資料を、<br />そのまま確認できる形で。</h2>
@@ -708,6 +735,7 @@ function VerifiedTestSection() {
         </article>
 
       </div>
+      <SectionContinuation target="consultation" index="09" label="導入条件を相談する" detail="設置場所・人数・納期を整理" />
     </section>
   );
 }
@@ -744,11 +772,9 @@ function ProductFilmSection() {
     >
       <div className="product-film-bridge">
         <p className="post-section-index"><span>06</span> 製品映像</p>
-        <h2 id="product-film-title">構造を見て、<br />データで確かめる。</h2>
-        <p>製品の組み立ちを映像で確認した後、第三者試験の資料へ進めます。</p>
-        <a className="product-film-evidence-link" href="#measurement">
-          第三者試験資料へ <ArrowUpRight weight="bold" />
-        </a>
+        <h2 id="product-film-title">動きを見て、<br />次の一台を選ぶ。</h2>
+        <p>製品の組み立ちを映像で確認した後、9つのSKUを正面図と45度ビューで比較できます。</p>
+        <SectionContinuation target="product-skus" index="07" label="SKUを比較する" detail="サイズと掲載色を一画面で確認" />
       </div>
       <figure className="product-film">
         <div className="product-film-media">
@@ -1025,7 +1051,7 @@ function ProductSkuSection({ selection, onSelect }: ProductSkuSectionProps) {
     <section
       className="post-story-section product-sku-section"
       id="product-skus"
-      data-next-target="consultation"
+      data-next-target="measurement"
       aria-labelledby="product-sku-title"
     >
       <div className="product-sku-copy">
@@ -1038,6 +1064,7 @@ function ProductSkuSection({ selection, onSelect }: ProductSkuSectionProps) {
           <small>{selectedProduct.label} ・ {selectedColor.label} ・ 掲載画像 {String(selectedIndex + 1).padStart(2, "0")} / {String(productSkus.length).padStart(2, "0")}</small>
         </div>
         <p className="product-price">¥---,---（価格確認中）</p>
+        <SectionContinuation target="measurement" index="08" label="試験資料を確認する" detail="測定値と分類を原資料で確認" />
       </div>
 
       <div className="product-sku-viewer">
@@ -1317,7 +1344,9 @@ export function App() {
                 ))}
           </p>
               <p className="hero-product-note"><strong>SPD01</strong>　受測サンプル：W1000 × D1000 × H2300 mm　<a href="#consultation">見積もり・設置条件を相談する</a></p>
+              <SectionContinuation className="continuation-desktop" target="structure" index="02" label="製品構造を見る" detail="10の主要部材を分解表示" />
             </div>
+            <SectionContinuation className="continuation-mobile" target="structure" index="02" label="製品構造を見る" detail="10の主要部材を分解表示" />
           </div>
         </section>
 
@@ -1333,7 +1362,9 @@ export function App() {
               <p className="structure-kicker"><span>02</span> 製品構造 / COMPONENT MAP</p>
               <h2 id="structure-title">静けさを支える、<br />10の主要構成。</h2>
               <p>実際のSPD01モデルに沿って、主要部材の位置と構成を表示します。</p>
+              <SectionContinuation className="continuation-desktop" target="acoustic" index="03" label="遮音性能を確かめる" detail="第三者試験の測定値へ" />
             </div>
+            <SectionContinuation className="continuation-mobile" target="acoustic" index="03" label="遮音性能を確かめる" detail="第三者試験の測定値へ" />
             <div className="part-legend" aria-label="製品部品一覧">
               {partLabels.map((part) => <span key={part.name}>{part.name}</span>)}
             </div>
@@ -1353,7 +1384,9 @@ export function App() {
               <ScrollHeading id="acoustic-title" lines={["音は、境界で", "小さくなる。"]} />
               <p>SPD01 W1000 × D1000 × H2300 mm の受測サンプルは、ISO 23351-1:2020 に基づく実験室測定で 30.3 dB / Class A。SGS 報告書 CZIN2605000320CM02_EN（2026年5月28日発行）で確認できます。</p>
               <p className="acoustic-spec"><a href="#measurement">第三者試験資料を見る</a></p>
+              <SectionContinuation className="continuation-desktop" target="modular" index="04" label="空間構成を見る" detail="移設と再組立ての考え方へ" />
             </div>
+            <SectionContinuation className="continuation-mobile" target="modular" index="04" label="空間構成を見る" detail="移設と再組立ての考え方へ" />
           </div>
         </section>
 
@@ -1370,7 +1403,9 @@ export function App() {
               <ScrollHeading id="modular-title" lines={["変化する空間に、", "組み直して応える。"]} />
               <p>主要部材をグループ化し、構成順序を保った再組立てに対応。移設やレイアウト変更を想定した構成です。</p>
               <p className="chapter-evidence"><strong>SPD01 基準寸法</strong> W1000 × D1000 × H2300 mm</p>
+              <SectionContinuation className="continuation-desktop" target="interaction" index="05" label="扉と操作を見る" detail="使い始めるまでの動作へ" />
             </div>
+            <SectionContinuation className="continuation-mobile" target="interaction" index="05" label="扉と操作を見る" detail="使い始めるまでの動作へ" />
           </div>
         </section>
 
@@ -1387,7 +1422,9 @@ export function App() {
               <ScrollHeading id="interaction-title" lines={["扉を閉じて、", "静けさへ戻る。"]} />
               <p>フロントドアを閉じると外部の音を抑え、固定デスクで作業へ戻れる静かな環境をつくります。</p>
               <p className="chapter-evidence"><strong>操作点</strong> フロントドア / 固定デスク</p>
+              <SectionContinuation className="continuation-desktop" target="product-film" index="06" label="製品映像を見る" detail="構造の動きを映像で確認" />
             </div>
+            <SectionContinuation className="continuation-mobile" target="product-film" index="06" label="製品映像を見る" detail="構造の動きを映像で確認" />
           </div>
         </section>
 
